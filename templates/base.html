@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title if title else "Personalized Recommender" }}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Personalized Recommendation System</h1>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <header>
+  <h1>Personalized Recommendation System</h1>
+  <nav>
+    <a href="{{ url_for('index') }}">Home</a> |
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+  </nav>
+</header>
+
+
+</body>
+</html>

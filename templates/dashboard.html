@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Model Comparison Dashboard</h2>
+
+<p>This dashboard summarizes the performance of different recommendation models.</p>
+
+<section class="metrics-section">
+  <table class="metrics-table">
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>RMSE</th>
+        <th>MAE</th>
+        <th>Precision@5</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in summary %}
+      <tr>
+        <td>{{ row.model }}</td>
+        <td>{{ "%.4f"|format(row.rmse) }}</td>
+        <td>{{ "%.4f"|format(row.mae) }}</td>
+        <td>{{ "%.4f"|format(row.precision) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% endblock %}

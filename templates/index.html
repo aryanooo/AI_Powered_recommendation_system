@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST">
+  <label>User ID:</label>
+  <input type="text" name="user_id" placeholder="Enter user ID">
+
+  <label>Select an item you like:</label>
+  <select name="item_id">
+    <option value="">-- Choose item --</option>
+    {% for item in items %}
+      <option value="{{ item.item_id }}">{{ item.title }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Get Recommendations</button>
+</form>
+
+{% if recommendations %}
+  <h2>Recommended for you</h2>
+  <ul>
+    {% for rec in recommendations %}
+      <li>
+        {{ rec.title }} (score: {{ "%.3f"|format(rec.score) }})
+        <form method="POST" action="{{ url_for('feedback') }}" style="display:inline;">
+          <input type="hidden" name="user_id" value="{{ request.form.get('user_id', '') }}">
+          <input type="hidden" name="item_id" value="{{ rec.item_id }}">
+          <button type="submit" name="feedback" value="like">👍</button>
+          <button type="submit" name="feedback" value="dislike">👎</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% endblock %}
