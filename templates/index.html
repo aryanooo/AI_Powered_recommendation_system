@@ -1,36 +1,90 @@
 {% extends "base.html" %}
 {% block content %}
 
-<form method="POST">
-  <label>User ID:</label>
-  <input type="text" name="user_id" placeholder="Enter user ID">
+<section class="card">
+  <h2>Get recommendations</h2>
+  <p class="card-text">
+    Enter a user ID and optionally pick an item they like to generate personalized suggestions.
+  </p>
 
-  <label>Select an item you like:</label>
-  <select name="item_id">
-    <option value="">-- Choose item --</option>
-    {% for item in items %}
-      <option value="{{ item.item_id }}">{{ item.title }}</option>
-    {% endfor %}
-  </select>
+  <form method="POST" class="form-grid">
+    <div class="form-field">
+      <label for="user_id">User ID</label>
+      <input
+        type="text"
+        id="user_id"
+        name="user_id"
+        placeholder="e.g. 1"
+      >
+    </div>
 
-  <button type="submit">Get Recommendations</button>
-</form>
+    <div class="form-field">
+      <label for="item_id">Select an item you like</label>
+      <select id="item_id" name="item_id">
+        <option value="">-- Choose item --</option>
+        {% for item in items %}
+          <option value="{{ item.item_id }}">{{ item.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">
+        Get Recommendations
+      </button>
+    </div>
+  </form>
+</section>
 
 {% if recommendations %}
+<section class="card">
   <h2>Recommended for you</h2>
-  <ul>
+  <ul class="recommendations-list">
     {% for rec in recommendations %}
-      <li>
-        {{ rec.title }} (score: {{ "%.3f"|format(rec.score) }})
-        <form method="POST" action="{{ url_for('feedback') }}" style="display:inline;">
-          <input type="hidden" name="user_id" value="{{ request.form.get('user_id', '') }}">
-          <input type="hidden" name="item_id" value="{{ rec.item_id }}">
-          <button type="submit" name="feedback" value="like">👍</button>
-          <button type="submit" name="feedback" value="dislike">👎</button>
+      <li class="recommendation-item">
+        <div class="rec-main">
+          <span class="rec-title">{{ rec.title }}</span>
+          {% if rec.score is defined %}
+            <span class="rec-score">Score: {{ "%.3f"|format(rec.score) }}</span>
+          {% endif %}
+        </div>
+
+        <form
+          method="POST"
+          action="{{ url_for('feedback') }}"
+          class="feedback-form"
+        >
+          <input
+            type="hidden"
+            name="user_id"
+            value="{{ request.form.get('user_id', '') }}"
+          >
+          <input
+            type="hidden"
+            name="item_id"
+            value="{{ rec.item_id }}"
+          >
+          <button
+            type="submit"
+            name="feedback"
+            value="like"
+            class="btn-secondary"
+          >
+            👍 Like
+          </button>
+          <button
+            type="submit"
+            name="feedback"
+            value="dislike"
+            class="btn-ghost"
+          >
+            👎 Skip
+          </button>
         </form>
       </li>
     {% endfor %}
   </ul>
+</section>
 {% endif %}
 
 {% endblock %}

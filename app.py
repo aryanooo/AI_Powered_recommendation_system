@@ -1,20 +1,30 @@
 # app.py
+import os
 from flask import Flask, render_template, request, redirect, url_for
+
 from recommender.hybrid import HybridRecommender
 from recommender.data_loader import load_items
 
 app = Flask(__name__)
 
+# create a single global model object
 hybrid_model = HybridRecommender()
 
-@app.before_first_request
-def load_model():
-    hybrid_model.fit()
-    print("Hybrid model fitted and ready!")
+# FIT MODEL ON STARTUP (Flask 3+ compatible)
+print("[INFO] Fitting hybrid model...")
+hybrid_model.fit()
+print("[INFO] Hybrid model fitted and ready!")
 
+# *************  ✨ Windsurf Command 🌟  *************
 @app.route("/", methods=["GET", "POST"])
 def index():
+    """
+    Main entry point for the web interface.
+    Handles both GET and POST requests.
+    """
+    # load items to populate the dropdown
     items = load_items()
+
     recommendations = []
     selected_item_id = None
     user_id = None
@@ -39,34 +49,21 @@ def index():
         recommendations=recommendations
     )
 
+# *******  c05b6b57-7fce-4981-9997-d5c981cd8a05  *******
 @app.route("/feedback", methods=["POST"])
 def feedback():
     """
-    Simple feedback handler. In a full project:
-    - Read user_id, item_id, feedback_type (like/dislike)
-    - Convert to rating (e.g., like=5, dislike=1)
-    - Append to ratings.csv
-    - Re-train model periodically or on demand
+    Placeholder feedback endpoint.
+    Currently just prints feedback to console.
     """
     user_id = request.form.get("user_id")
     item_id = request.form.get("item_id")
-    feedback_type = request.form.get("feedback")  # 'like' or 'dislike'
+    feedback_type = request.form.get("feedback")
 
-    print(f"Received feedback: user {user_id}, item {item_id}, {feedback_type}")
-    # TODO: Append to ratings.csv & retrain
+    print(f"[FEEDBACK] user={user_id}, item={item_id}, feedback={feedback_type}")
 
     return redirect(url_for("index"))
 
-@app.route("/dashboard")
-def dashboard():
-    # In a real project you might load these from a JSON file
-    summary = [
-        {"model": "CF", "rmse": 0.95, "mae": 0.75, "precision": 0.42},
-        {"model": "NMF", "rmse": 0.90, "mae": 0.70, "precision": 0.45},
-        {"model": "Hybrid", "rmse": 0.88, "mae": 0.68, "precision": 0.50},
-    ]
-    return render_template("dashboard.html", summary=summary)
-
-
 if __name__ == "__main__":
+    print("[INFO] Starting Flask app...")
     app.run(debug=True)

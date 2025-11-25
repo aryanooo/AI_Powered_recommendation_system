@@ -43,10 +43,8 @@ Develop a machine learning-based recommendation engine that provides **personali
 ## 3. Project Structure
 
 ```text
-personalized_recommender/
+Root folder
 ├── app.py                     # Main Flask application
-├── requirements.txt           # Project dependencies
-├── README.md                  # This file
 │
 ├── data/
 │   ├── items.csv              # Item metadata (e.g., movies/products)
@@ -72,6 +70,8 @@ personalized_recommender/
 │   ├── eda.ipynb              # Week 1 - Exploratory Data Analysis
 │   └── model_evaluation.ipynb # Week 2/3 - Model evaluation & comparison
 │
+├── requirements.txt           # Project dependencies
+├── README.md                  # This file
 └── reports/
     └── final_report.md        # Week 4 - Project report
 ````

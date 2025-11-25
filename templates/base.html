@@ -2,24 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>{{ title if title else "Personalized Recommender" }}</title>
-  <link rel="stylesheet" href="/static/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title or "Personalized Recommendation System" }}</title>
+
+  <!-- Optional Google font (fallbacks to system fonts if offline) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <header>
-    <h1>Personalized Recommendation System</h1>
-  </header>
-  <main>
-    {% block content %}{% endblock %}
-  </main>
-  <header>
-  <h1>Personalized Recommendation System</h1>
-  <nav>
-    <a href="{{ url_for('index') }}">Home</a> |
-    <a href="{{ url_for('dashboard') }}">Dashboard</a>
-  </nav>
-</header>
+  <div class="page">
+    <header class="header">
+      <div class="logo-circle">AI</div>
+      <div class="header-text">
+        <h1>Personalized Recommendation System</h1>
+        <p class="subtitle">Hybrid ML recommender • Content-based + Collaborative + NMF</p>
+      </div>
+    </header>
 
+    <main class="content">
+      {% block content %}{% endblock %}
+    </main>
 
+    <footer class="footer">
+      <span>Built with Flask · Python · scikit-learn</span>
+    </footer>
+  </div>
 </body>
 </html>
